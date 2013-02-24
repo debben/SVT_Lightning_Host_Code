@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -152,6 +154,14 @@ namespace WiFiCommunicator
             TargetAddress   = IPAddress.Parse(textTargetIP.Text);
             // save the default port
             TargetPort      = Convert.ToInt16(numericTargetPort.Value);
+            // clear the com port combobox
+            comboPortName.Items.Clear();
+            // add the com ports to the combobox
+            comboPortName.Items.AddRange(SerialPort.GetPortNames());
+            // select the last item
+            comboPortName.SelectedIndex     = (comboPortName.Items.Count - 1);
+            // select 9600 baud
+            comboBaudRate.SelectedIndex = comboBaudRate.Items.IndexOf("9600");
         }
 
         private void ReportEvent(String message)
@@ -163,7 +173,7 @@ namespace WiFiCommunicator
             // set the event text
             event_item.SubItems.Add(message);
             // save the item
-            listLog.Items.Add(event_item);
+            listEventLog.Items.Add(event_item);
             // ensure that the event item is visible
             event_item.EnsureVisible();
         }
@@ -1168,9 +1178,232 @@ namespace WiFiCommunicator
             buttonBattery.Enabled   = checkEnableBattery.Checked;
         }
 
-        private void timerReceiver_Tick(object sender, EventArgs e)
+        private void timerReceiver_Tick
+            (object sender, EventArgs e)
         {
 
+        }
+
+        private void linkClearEventLog_LinkClicked
+            (object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // clear the event log
+            listEventLog.Items.Clear();
+        }
+
+        private void linkClearSerialLog_LinkClicked
+            (object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // clear the serial log
+            listSerialLog.Items.Clear();
+        }
+
+        private void linkRefresh_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // clear the com port combobox
+            comboPortName.Items.Clear();
+            // add the com ports to the combobox
+            comboPortName.Items.AddRange(SerialPort.GetPortNames());
+            // select the last item
+            comboPortName.SelectedIndex = (comboPortName.Items.Count - 1);
+        }
+
+        private void buttonOpenSerial_Click(object sender, EventArgs e)
+        {
+            // determine if the port is open
+            switch (serialPort.IsOpen)
+            {
+                case true:
+                    // the port is open
+                    // do nothing
+                    // break out
+                    break;
+                case false:
+                    // the port is closed
+                    // set the port name
+                    serialPort.PortName = comboPortName.SelectedItem as String;
+                    // set the baud rate
+                    serialPort.BaudRate = Int32.Parse(comboBaudRate.SelectedItem as String);
+                    // try this
+                    try
+                    {
+                        // open the port
+                        serialPort.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        // warn the user
+                        MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    // break out
+                    break;
+            }
+            // determine if the port was opened
+            switch (serialPort.IsOpen)
+            {
+                case true:
+                    // the port is open
+                    // set the button states
+                    buttonOpenSerial.Enabled    = false;
+                    buttonCloseSerial.Enabled   = true;
+                    // disable the serial groupbox
+                    groupSerial.Enabled         = false;
+                    // break out
+                    break;
+                case false:
+                    // the port is closed
+                    // set the button states
+                    buttonOpenSerial.Enabled    = true;
+                    buttonCloseSerial.Enabled   = false;
+                    // disable the serial groupbox
+                    groupSerial.Enabled         = true;
+                    // break out
+                    break;
+            }
+        }
+
+        private void buttonCloseSerial_Click(object sender, EventArgs e)
+        {
+            // determine if the port is open
+            switch (serialPort.IsOpen)
+            {
+                case true:
+                    // the port is open
+                    // try this
+                    try
+                    {
+                        // close the port
+                        serialPort.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        // warn the user
+                        MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    // break out
+                    break;
+                case false:
+                    // the port is closed
+                    // do nothing
+                    // break out
+                    break;
+            }
+            // determine if the port was opened
+            switch (serialPort.IsOpen)
+            {
+                case true:
+                    // the port is open
+                    // set the button states
+                    buttonOpenSerial.Enabled = false;
+                    buttonCloseSerial.Enabled = true;
+                    // disable the serial groupbox
+                    groupSerial.Enabled = false;
+                    // break out
+                    break;
+                case false:
+                    // the port is closed
+                    // set the button states
+                    buttonOpenSerial.Enabled = true;
+                    buttonCloseSerial.Enabled = false;
+                    // disable the serial groupbox
+                    groupSerial.Enabled = true;
+                    // break out
+                    break;
+            }
+        }
+
+        private void linkSaveSerialLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // the file name
+            String          file_name       = String.Empty;
+            // the contents of a csv file
+            String          file_contents   = String.Empty;
+            // a single line of a csv file
+            String          csv_line        = String.Empty;
+            // an event item
+            ListViewItem    event_item      = null;
+            // the last item
+            ListViewItem    last_item       = listSerialLog.Items[listSerialLog.Items.Count - 1];
+            // the last date
+            DateTime        last_time       = DateTime.ParseExact(last_item.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            // iterate through the items
+            for (int event_index = 0; 
+                 event_index < listSerialLog.Items.Count; 
+                 event_index++)
+            {
+                // get this item
+                event_item      = listSerialLog.Items[event_index];
+                // create this line
+                csv_line        = String.Format("{0}, {1}, {2}\n", event_index, event_item.Text, event_item.SubItems[1].Text);
+                // save this line
+                file_contents  += csv_line;
+            }
+            // create the file name
+            file_name           = textOutputPath.Text + @"\" + String.Format("SCL_{0}_{1}_{2}_{3}.csv", 
+                                                                             last_time.Hour, 
+                                                                             last_time.Minute, 
+                                                                             last_time.Second,
+                                                                             last_time.Millisecond);
+            // determine if there is an output path
+            if (String.IsNullOrWhiteSpace(textOutputPath.Text) == false &&
+                Directory.Exists(textOutputPath.Text))
+            {
+                // save the file
+                File.WriteAllText(file_name, file_contents);
+            }
+            else
+            {
+                // warn the user
+                MessageBox.Show("Please enter a valid path into the 'Output Path' field.",
+                                this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void linkSaveEventLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // the file name
+            String          file_name       = String.Empty;
+            // the contents of a csv file
+            String          file_contents   = String.Empty;
+            // a single line of a csv file
+            String          csv_line        = String.Empty;
+            // an event item
+            ListViewItem    event_item      = null;
+            // the last item
+            ListViewItem    last_item       = listEventLog.Items[listEventLog.Items.Count - 1];
+            // the last date
+            DateTime        last_time       = DateTime.ParseExact(last_item.Text, "HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            // iterate through the items
+            for (int event_index = 0; 
+                 event_index < listEventLog.Items.Count; 
+                 event_index++)
+            {
+                // get this item
+                event_item      = listEventLog.Items[event_index];
+                // create this line
+                csv_line        = String.Format("{0}, {1}, {2}\n", event_index, event_item.Text, event_item.SubItems[1].Text);
+                // save this line
+                file_contents  += csv_line;
+            }
+            // create the file name
+            file_name           = textOutputPath.Text + @"\" + String.Format("EVL_{0}_{1}_{2}_{3}.csv", 
+                                                                             last_time.Hour, 
+                                                                             last_time.Minute, 
+                                                                             last_time.Second, 
+                                                                             last_time.Millisecond);
+            // determine if there is an output path
+            if (String.IsNullOrWhiteSpace(textOutputPath.Text) == false &&
+                Directory.Exists(textOutputPath.Text))
+            {
+                // save the file
+                File.WriteAllText(file_name, file_contents);
+            }
+            else
+            {
+                // warn the user
+                MessageBox.Show("Please enter a valid path into the 'Output Path' field.", 
+                                this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -2,6 +2,17 @@
 #include <DNETcK.h>
 #include <DWIFIcK.h>
 
+// define the audio breakout pins
+#define         AUDIO_RESET_PIN       54
+#define         AUDIO_PREVIOUS_PIN    55
+#define         AUDIO_PLAY_PIN        56
+#define         AUDIO_NEXT_PIN        57
+#define         AUDIO_BUSY_PIN        58
+// define the audio bounds
+#define         MAX_TRACK             0x01FF    // 0511
+#define         MIN_TRACK             0x0000    // 0000
+#define         TOGGLE_DELAY          0x0400    // 1024 (milliseconds)
+
 // the local ip address
 IPv4            local_ip_addr         = { 192, 168, 1, 200 };
 // the local port
@@ -107,6 +118,11 @@ byte            brake_blue            = 0x00;
 byte            reverse_red           = 0x00;
 byte            reverse_green         = 0x00;
 byte            reverse_blue          = 0x00;
+// the "track playing" flag
+boolean         track_playing         = false;
+
+// define the translate red function
+#define TranslateRed(value) map(value, 0, 255, 0, 170)
 
 // the status
 DNETcK::STATUS      status = DNETcK::None;
@@ -125,10 +141,12 @@ void setup()
     Serial.println("-        WiFi R/C Car Communicator        -");
     Serial.println("-    Kettering University, Winter 2013    -");
     Serial.println("-------------------------------------------");
-    // set the wait time to nothing
-    DNETcK::setDefaultBlockTime(DNETcK::msImmediate);
-    // begin the scan
-    DWIFIcK::beginScan(DWIFIcK::WF_ACTIVE_SCAN);
+    // initialize the audio breakout pins
+    pinMode(AUDIO_RESET_PIN);    // do not toggle
+    pinMode(AUDIO_PREVIOUS_PIN); digitalWrite(AUDIO_PREVIOUS_PIN, HIGH);
+    pinMode(AUDIO_NEXT_PIN);     digitalWrite(AUDIO_NEXT_PIN, HIGH);
+    pinMode(AUDIO_PLAY_PIN);     digitalWrite(AUDIO_PLAY_PIN, HIGH);
+    pinMode(AUDIO_BUSY_PIN);     // input only
     // determine if the device can connect to wifi
     if ((connection_id = WiFiConnectMacro()) != DWIFIcK::INVALID_CONNECTION_ID)
     {
@@ -136,6 +154,7 @@ void setup()
         // print
         Serial.println("Connection established!");
           Serial.print("ID     = "); Serial.println(connection_id, DEC);
+
         // save the state
         udp_state = UDP_INITIALIZE;
     }
@@ -151,8 +170,72 @@ void setup()
     DNETcK::begin(local_ip_addr);
 }
 
-void loop()
+#define TogglePin(pin)                  \
+            digitalWrite(pin, HIGH);    \
+            delay(AUDIO_TOGGLE_DELAY);  \
+            digitalWrite(pin, LOW);     \
+            delay(AUDIO_TOGGLE_DELAY);  \
+            digitalWrite(pin, HIGH);    \
+
+void togglePlayback()
 {
+    // read the busy pin
+    switch (audioIsBusy())
+    {
+        case true:
+            // playback is active
+            // print
+            Serial.println("State before 'PLAY' pin toggle: [  ACTIVE  ]");
+            // break out
+            break;
+        case false:
+            // playback is inactive
+            // print
+            Serial.println("State before 'PLAY' pin toggle: [ INACTIVE ]");
+            // break out
+            break;
+    }
+    // toggle the PLAY pin
+    TogglePin(AUDIO_PLAY_PIN);
+    // read the busy pin
+    switch (audioIsBusy())
+    {
+        case true:
+            // playback is active
+            // print
+            Serial.println("State after 'PLAY' pin toggle:  [  ACTIVE  ]");
+            // break out
+            break;
+        case false:
+            // playback is inactive
+            // print
+            Serial.println("State after 'PLAY' pin toggle:  [ INACTIVE ]");
+            // break out
+            break;
+    }
+}
+void nextTrack()
+{
+    // toggle the NEXT pin
+    TogglePin(AUDIO_NEXT_PIN);
+}
+void previousTrack()
+{
+    // toggle the PREV pin
+    TogglePin(AUDIO_PREVIOUS_PIN);
+}
+boolean audioIsBusy()
+{
+    // the result
+    boolean result = digitalRead(AUDIO_BUSY_PIN);
+    // return the result
+    return result;
+}
+void scanStateMachine()
+{// set the wait time to nothing
+    DNETcK::setDefaultBlockTime(DNETcK::msImmediate);
+    // begin the scan
+    DWIFIcK::beginScan(DWIFIcK::WF_ACTIVE_SCAN);
     // determine the current state of the scan interface
     switch (net_state)
     {
@@ -246,6 +329,10 @@ void loop()
             break;
             
     }
+}
+
+void udpStateMachine()
+{
     // determine the current state of the udp interface
     switch (udp_state)
     {
@@ -436,13 +523,13 @@ void loop()
                 case 'T':
                     // this was a toggle playback command
                     // print
-                    Serial.print("Command Received:     "); Serial.println("['T'] NEXT TRACK");
+                    Serial.print("Command Received:     "); Serial.println("['T'] TOGGLE PLAYBACK");
                     // break out
                     break;
                 case 'P':
                     // this was a previous track command
                     // print
-                    Serial.print("Command Received:     "); Serial.println("['P'] NEXT TRACK");
+                    Serial.print("Command Received:     "); Serial.println("['P'] PREVIOUS TRACK");
                     // break out
                     break;
                 case 'S':
@@ -475,7 +562,7 @@ void loop()
                 case 'C':
                     // this was a send colors command
                     // print
-                    Serial.print("Command Received:     "); Serial.println("['C'] SET COLORS");
+                    Serial.print("Command Received:     "); Serial.println("['C'] SET SIGNAL COLORS");
                     // save the turn signal color values
                     turn_red       = input_buffer[1];
                     turn_green     = input_buffer[2];
@@ -585,6 +672,26 @@ void loop()
             // break out
             break;
     }
+}
+
+void loop()
+{        
+    // run the scan state machine
+    scanStateMachine();
+    // run the udp state machine
+    udpStateMachine();
     // run the periodic tasks
     DNETcK::periodicTasks();
+}
+
+uint32_t updateControls(uint32_t current)
+{
+    // the duration
+    uint32_t duration = 0;      // 125 nanoseconds per tick < at 80MHz >
+                                // 8M ticks per second
+                                // 8K ticks per millisecond
+                                // 8  ticks per microsecond
+                                
+    // return the time until the next interrupt
+    return current + duration;
 }

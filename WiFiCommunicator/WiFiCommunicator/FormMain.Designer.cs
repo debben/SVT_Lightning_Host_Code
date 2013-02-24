@@ -114,8 +114,9 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.listLog = new System.Windows.Forms.ListView();
+            this.groupEventLog = new System.Windows.Forms.GroupBox();
+            this.linkClearEventLog = new System.Windows.Forms.LinkLabel();
+            this.listEventLog = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupOutputPath = new System.Windows.Forms.GroupBox();
@@ -126,6 +127,26 @@
             this.buttonSignal = new System.Windows.Forms.Button();
             this.buttonBattery = new System.Windows.Forms.Button();
             this.buttonSendSettings = new System.Windows.Forms.Button();
+            this.buttonOpenSerial = new System.Windows.Forms.Button();
+            this.buttonCloseSerial = new System.Windows.Forms.Button();
+            this.groupSerialLog = new System.Windows.Forms.GroupBox();
+            this.linkClearSerialLog = new System.Windows.Forms.LinkLabel();
+            this.listSerialLog = new System.Windows.Forms.ListView();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.groupSerial = new System.Windows.Forms.GroupBox();
+            this.linkRefresh = new System.Windows.Forms.LinkLabel();
+            this.numericCheckInterval = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBaudRate = new System.Windows.Forms.ComboBox();
+            this.comboPortName = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.serialPort = new System.IO.Ports.SerialPort(this.components);
+            this.linkSaveEventLog = new System.Windows.Forms.LinkLabel();
+            this.linkSaveSerialLog = new System.Windows.Forms.LinkLabel();
             this.groupTargetIP.SuspendLayout();
             this.groupTargetPort.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericTargetPort)).BeginInit();
@@ -141,8 +162,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericIncreaseInterval)).BeginInit();
             this.statusStrip.SuspendLayout();
             this.groupSignalColors.SuspendLayout();
-            this.groupBox10.SuspendLayout();
+            this.groupEventLog.SuspendLayout();
             this.groupOutputPath.SuspendLayout();
+            this.groupSerialLog.SuspendLayout();
+            this.groupSerial.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCheckInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // groupTargetIP
@@ -173,7 +197,7 @@
             this.groupTargetPort.Location = new System.Drawing.Point(179, 12);
             this.groupTargetPort.Name = "groupTargetPort";
             this.groupTargetPort.Size = new System.Drawing.Size(161, 45);
-            this.groupTargetPort.TabIndex = 2;
+            this.groupTargetPort.TabIndex = 1;
             this.groupTargetPort.TabStop = false;
             this.groupTargetPort.Text = "Target Port";
             // 
@@ -224,7 +248,7 @@
             this.groupVehicleSpeed.Location = new System.Drawing.Point(12, 170);
             this.groupVehicleSpeed.Name = "groupVehicleSpeed";
             this.groupVehicleSpeed.Size = new System.Drawing.Size(495, 113);
-            this.groupVehicleSpeed.TabIndex = 6;
+            this.groupVehicleSpeed.TabIndex = 7;
             this.groupVehicleSpeed.TabStop = false;
             this.groupVehicleSpeed.Text = "Vehicle Speed";
             // 
@@ -235,7 +259,7 @@
             this.labelMaximumSpeed.Location = new System.Drawing.Point(452, 93);
             this.labelMaximumSpeed.Name = "labelMaximumSpeed";
             this.labelMaximumSpeed.Size = new System.Drawing.Size(35, 13);
-            this.labelMaximumSpeed.TabIndex = 3;
+            this.labelMaximumSpeed.TabIndex = 8;
             this.labelMaximumSpeed.Text = "255";
             this.labelMaximumSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -255,7 +279,7 @@
             this.label34.Location = new System.Drawing.Point(85, 93);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(62, 13);
-            this.label34.TabIndex = 1;
+            this.label34.TabIndex = 7;
             this.label34.Text = "55";
             this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -267,7 +291,7 @@
             this.label11.Location = new System.Drawing.Point(427, 80);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(62, 13);
-            this.label11.TabIndex = 6;
+            this.label11.TabIndex = 5;
             this.label11.Text = "Forward";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -278,7 +302,7 @@
             this.label9.Location = new System.Drawing.Point(6, 79);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(62, 13);
-            this.label9.TabIndex = 4;
+            this.label9.TabIndex = 3;
             this.label9.Text = "Reverse";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -289,7 +313,7 @@
             this.labelMinimumSpeed.Location = new System.Drawing.Point(6, 93);
             this.labelMinimumSpeed.Name = "labelMinimumSpeed";
             this.labelMinimumSpeed.Size = new System.Drawing.Size(35, 13);
-            this.labelMinimumSpeed.TabIndex = 1;
+            this.labelMinimumSpeed.TabIndex = 6;
             this.labelMinimumSpeed.Text = "0";
             this.labelMinimumSpeed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -303,7 +327,7 @@
             this.trackSpeed.Maximum = 255;
             this.trackSpeed.Name = "trackSpeed";
             this.trackSpeed.Size = new System.Drawing.Size(483, 35);
-            this.trackSpeed.TabIndex = 0;
+            this.trackSpeed.TabIndex = 2;
             this.trackSpeed.TickFrequency = 5;
             this.trackSpeed.Value = 55;
             this.trackSpeed.Scroll += new System.EventHandler(this.trackSpeed_ValueChanged);
@@ -371,7 +395,7 @@
             this.groupVehicleDirection.Location = new System.Drawing.Point(513, 170);
             this.groupVehicleDirection.Name = "groupVehicleDirection";
             this.groupVehicleDirection.Size = new System.Drawing.Size(494, 113);
-            this.groupVehicleDirection.TabIndex = 7;
+            this.groupVehicleDirection.TabIndex = 8;
             this.groupVehicleDirection.TabStop = false;
             this.groupVehicleDirection.Text = "Vehicle Direction";
             // 
@@ -381,7 +405,7 @@
             this.label13.Location = new System.Drawing.Point(216, 92);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(62, 13);
-            this.label13.TabIndex = 1;
+            this.label13.TabIndex = 6;
             this.label13.Text = "128";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -392,7 +416,7 @@
             this.label10.Location = new System.Drawing.Point(216, 79);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(62, 13);
-            this.label10.TabIndex = 4;
+            this.label10.TabIndex = 3;
             this.label10.Text = "Straight";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -404,7 +428,7 @@
             this.label14.Location = new System.Drawing.Point(426, 80);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(62, 13);
-            this.label14.TabIndex = 6;
+            this.label14.TabIndex = 4;
             this.label14.Text = "Right";
             this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -415,7 +439,7 @@
             this.labelMaximumRight.Location = new System.Drawing.Point(453, 93);
             this.labelMaximumRight.Name = "labelMaximumRight";
             this.labelMaximumRight.Size = new System.Drawing.Size(35, 13);
-            this.labelMaximumRight.TabIndex = 3;
+            this.labelMaximumRight.TabIndex = 7;
             this.labelMaximumRight.Text = "255";
             this.labelMaximumRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -427,7 +451,7 @@
             this.label12.Location = new System.Drawing.Point(7, 80);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(62, 13);
-            this.label12.TabIndex = 4;
+            this.label12.TabIndex = 2;
             this.label12.Text = "Left";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -438,7 +462,7 @@
             this.labelMaximumLeft.Location = new System.Drawing.Point(7, 93);
             this.labelMaximumLeft.Name = "labelMaximumLeft";
             this.labelMaximumLeft.Size = new System.Drawing.Size(35, 13);
-            this.labelMaximumLeft.TabIndex = 1;
+            this.labelMaximumLeft.TabIndex = 5;
             this.labelMaximumLeft.Text = "0";
             this.labelMaximumLeft.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -452,7 +476,7 @@
             this.trackDirection.Maximum = 255;
             this.trackDirection.Name = "trackDirection";
             this.trackDirection.Size = new System.Drawing.Size(482, 35);
-            this.trackDirection.TabIndex = 0;
+            this.trackDirection.TabIndex = 1;
             this.trackDirection.TickFrequency = 5;
             this.trackDirection.Value = 128;
             this.trackDirection.Scroll += new System.EventHandler(this.trackDirection_ValueChanged);
@@ -512,7 +536,7 @@
             this.buttonIncreaseSpeed.Location = new System.Drawing.Point(160, 397);
             this.buttonIncreaseSpeed.Name = "buttonIncreaseSpeed";
             this.buttonIncreaseSpeed.Size = new System.Drawing.Size(197, 45);
-            this.buttonIncreaseSpeed.TabIndex = 14;
+            this.buttonIncreaseSpeed.TabIndex = 19;
             this.buttonIncreaseSpeed.Text = "INCREASE SPEED (+25)";
             this.buttonIncreaseSpeed.UseVisualStyleBackColor = true;
             this.buttonIncreaseSpeed.Click += new System.EventHandler(this.buttonIncreaseSpeed_Click);
@@ -524,7 +548,7 @@
             this.buttonStop.Location = new System.Drawing.Point(221, 448);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(75, 75);
-            this.buttonStop.TabIndex = 21;
+            this.buttonStop.TabIndex = 22;
             this.buttonStop.Text = "FULL STOP";
             this.buttonStop.UseVisualStyleBackColor = true;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
@@ -546,7 +570,7 @@
             this.buttonTurnLeft.Location = new System.Drawing.Point(160, 448);
             this.buttonTurnLeft.Name = "buttonTurnLeft";
             this.buttonTurnLeft.Size = new System.Drawing.Size(55, 75);
-            this.buttonTurnLeft.TabIndex = 16;
+            this.buttonTurnLeft.TabIndex = 20;
             this.buttonTurnLeft.Text = "TURN\r\nLEFT\r\n(-32)";
             this.buttonTurnLeft.UseVisualStyleBackColor = true;
             this.buttonTurnLeft.Click += new System.EventHandler(this.buttonTurnLeft_Click);
@@ -557,7 +581,7 @@
             this.buttonTurnRight.Location = new System.Drawing.Point(302, 448);
             this.buttonTurnRight.Name = "buttonTurnRight";
             this.buttonTurnRight.Size = new System.Drawing.Size(55, 75);
-            this.buttonTurnRight.TabIndex = 18;
+            this.buttonTurnRight.TabIndex = 21;
             this.buttonTurnRight.Text = "TURN\r\nRIGHT\r\n(+32)";
             this.buttonTurnRight.UseVisualStyleBackColor = true;
             this.buttonTurnRight.Click += new System.EventHandler(this.buttonTurnRight_Click);
@@ -569,7 +593,7 @@
             this.buttonNextTrack.Location = new System.Drawing.Point(11, 339);
             this.buttonNextTrack.Name = "buttonNextTrack";
             this.buttonNextTrack.Size = new System.Drawing.Size(75, 75);
-            this.buttonNextTrack.TabIndex = 9;
+            this.buttonNextTrack.TabIndex = 10;
             this.buttonNextTrack.Text = "NEXT\r\nTRACK";
             this.buttonNextTrack.UseVisualStyleBackColor = true;
             this.buttonNextTrack.Click += new System.EventHandler(this.buttonNextTrack_Click);
@@ -581,7 +605,7 @@
             this.buttonTogglePlayback.Location = new System.Drawing.Point(11, 420);
             this.buttonTogglePlayback.Name = "buttonTogglePlayback";
             this.buttonTogglePlayback.Size = new System.Drawing.Size(75, 103);
-            this.buttonTogglePlayback.TabIndex = 10;
+            this.buttonTogglePlayback.TabIndex = 11;
             this.buttonTogglePlayback.Text = "PLAY/STOP\r\nTRACK";
             this.buttonTogglePlayback.UseVisualStyleBackColor = true;
             this.buttonTogglePlayback.Click += new System.EventHandler(this.buttonTogglePlayback_Click);
@@ -593,7 +617,7 @@
             this.buttonPreviousTrack.Location = new System.Drawing.Point(11, 529);
             this.buttonPreviousTrack.Name = "buttonPreviousTrack";
             this.buttonPreviousTrack.Size = new System.Drawing.Size(75, 75);
-            this.buttonPreviousTrack.TabIndex = 11;
+            this.buttonPreviousTrack.TabIndex = 12;
             this.buttonPreviousTrack.Text = "PREVIOUS\r\nTRACK";
             this.buttonPreviousTrack.UseVisualStyleBackColor = true;
             this.buttonPreviousTrack.Click += new System.EventHandler(this.buttonPreviousTrack_Click);
@@ -605,7 +629,7 @@
             this.label16.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(305, 38);
-            this.label16.TabIndex = 12;
+            this.label16.TabIndex = 13;
             this.label16.Text = "MOTOR AND SERVO CONTROL";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -616,7 +640,7 @@
             this.label17.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(75, 38);
-            this.label17.TabIndex = 22;
+            this.label17.TabIndex = 23;
             this.label17.Text = "BATTERY";
             this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -627,7 +651,7 @@
             this.label19.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(75, 38);
-            this.label19.TabIndex = 25;
+            this.label19.TabIndex = 27;
             this.label19.Text = "SIGNAL";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -649,7 +673,7 @@
             this.checkEnableBattery.Location = new System.Drawing.Point(6, 56);
             this.checkEnableBattery.Name = "checkEnableBattery";
             this.checkEnableBattery.Size = new System.Drawing.Size(164, 17);
-            this.checkEnableBattery.TabIndex = 3;
+            this.checkEnableBattery.TabIndex = 2;
             this.checkEnableBattery.Text = "Enable battery readings";
             this.checkEnableBattery.UseVisualStyleBackColor = true;
             this.checkEnableBattery.CheckedChanged += new System.EventHandler(this.checkEnableBattery_CheckedChanged);
@@ -703,7 +727,7 @@
             this.label28.Location = new System.Drawing.Point(152, 79);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(37, 13);
-            this.label28.TabIndex = 11;
+            this.label28.TabIndex = 0;
             this.label28.Text = "units";
             // 
             // label27
@@ -712,7 +736,7 @@
             this.label27.Location = new System.Drawing.Point(152, 60);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(37, 13);
-            this.label27.TabIndex = 8;
+            this.label27.TabIndex = 9;
             this.label27.Text = "units";
             // 
             // label26
@@ -721,7 +745,7 @@
             this.label26.Location = new System.Drawing.Point(152, 41);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(37, 13);
-            this.label26.TabIndex = 5;
+            this.label26.TabIndex = 6;
             this.label26.Text = "units";
             // 
             // label25
@@ -730,7 +754,7 @@
             this.label25.Location = new System.Drawing.Point(152, 22);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(37, 13);
-            this.label25.TabIndex = 2;
+            this.label25.TabIndex = 3;
             this.label25.Text = "units";
             // 
             // numericRightInterval
@@ -738,7 +762,7 @@
             this.numericRightInterval.Location = new System.Drawing.Point(90, 75);
             this.numericRightInterval.Name = "numericRightInterval";
             this.numericRightInterval.Size = new System.Drawing.Size(56, 20);
-            this.numericRightInterval.TabIndex = 10;
+            this.numericRightInterval.TabIndex = 11;
             this.numericRightInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericRightInterval.Value = new decimal(new int[] {
             32,
@@ -752,7 +776,7 @@
             this.numericLeftInterval.Location = new System.Drawing.Point(90, 56);
             this.numericLeftInterval.Name = "numericLeftInterval";
             this.numericLeftInterval.Size = new System.Drawing.Size(56, 20);
-            this.numericLeftInterval.TabIndex = 7;
+            this.numericLeftInterval.TabIndex = 8;
             this.numericLeftInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericLeftInterval.Value = new decimal(new int[] {
             32,
@@ -766,7 +790,7 @@
             this.numericDecreaseInterval.Location = new System.Drawing.Point(90, 37);
             this.numericDecreaseInterval.Name = "numericDecreaseInterval";
             this.numericDecreaseInterval.Size = new System.Drawing.Size(56, 20);
-            this.numericDecreaseInterval.TabIndex = 4;
+            this.numericDecreaseInterval.TabIndex = 5;
             this.numericDecreaseInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericDecreaseInterval.Value = new decimal(new int[] {
             10,
@@ -780,7 +804,7 @@
             this.numericIncreaseInterval.Location = new System.Drawing.Point(90, 18);
             this.numericIncreaseInterval.Name = "numericIncreaseInterval";
             this.numericIncreaseInterval.Size = new System.Drawing.Size(56, 20);
-            this.numericIncreaseInterval.TabIndex = 1;
+            this.numericIncreaseInterval.TabIndex = 2;
             this.numericIncreaseInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericIncreaseInterval.Value = new decimal(new int[] {
             25,
@@ -795,7 +819,7 @@
             this.label22.Location = new System.Drawing.Point(23, 41);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(61, 13);
-            this.label22.TabIndex = 3;
+            this.label22.TabIndex = 4;
             this.label22.Text = "Speed - =";
             // 
             // label24
@@ -804,7 +828,7 @@
             this.label24.Location = new System.Drawing.Point(23, 79);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(61, 13);
-            this.label24.TabIndex = 9;
+            this.label24.TabIndex = 10;
             this.label24.Text = "Right   =";
             // 
             // label23
@@ -813,7 +837,7 @@
             this.label23.Location = new System.Drawing.Point(29, 60);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(55, 13);
-            this.label23.TabIndex = 6;
+            this.label23.TabIndex = 7;
             this.label23.Text = "Left   =";
             // 
             // label21
@@ -822,7 +846,7 @@
             this.label21.Location = new System.Drawing.Point(23, 22);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(61, 13);
-            this.label21.TabIndex = 0;
+            this.label21.TabIndex = 1;
             this.label21.Text = "Speed + =";
             // 
             // label29
@@ -832,7 +856,7 @@
             this.label29.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(75, 38);
-            this.label29.TabIndex = 8;
+            this.label29.TabIndex = 9;
             this.label29.Text = "STEREO";
             this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -853,11 +877,11 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.labelStatus,
             this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 615);
+            this.statusStrip.Location = new System.Drawing.Point(0, 661);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(1019, 22);
             this.statusStrip.SizingGrip = false;
-            this.statusStrip.TabIndex = 0;
+            this.statusStrip.TabIndex = 36;
             this.statusStrip.Text = "statusStrip1";
             // 
             // labelStatus
@@ -883,7 +907,7 @@
             this.labelBattery.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelBattery.Name = "labelBattery";
             this.labelBattery.Size = new System.Drawing.Size(75, 49);
-            this.labelBattery.TabIndex = 23;
+            this.labelBattery.TabIndex = 24;
             this.labelBattery.Text = "0%";
             this.labelBattery.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelBattery.TextChanged += new System.EventHandler(this.labelBattery_TextChanged);
@@ -896,7 +920,7 @@
             this.labelSignal.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelSignal.Name = "labelSignal";
             this.labelSignal.Size = new System.Drawing.Size(75, 49);
-            this.labelSignal.TabIndex = 26;
+            this.labelSignal.TabIndex = 28;
             this.labelSignal.Text = "0%";
             this.labelSignal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelSignal.TextChanged += new System.EventHandler(this.labelSignal_TextChanged);
@@ -918,7 +942,7 @@
             this.buttonFullRight.Location = new System.Drawing.Point(363, 367);
             this.buttonFullRight.Name = "buttonFullRight";
             this.buttonFullRight.Size = new System.Drawing.Size(48, 237);
-            this.buttonFullRight.TabIndex = 17;
+            this.buttonFullRight.TabIndex = 16;
             this.buttonFullRight.Text = "FULL\r\nRIGHT\r\n(255)";
             this.buttonFullRight.UseVisualStyleBackColor = true;
             this.buttonFullRight.Click += new System.EventHandler(this.buttonFullRight_Click);
@@ -929,7 +953,7 @@
             this.buttonFullForward.Location = new System.Drawing.Point(160, 367);
             this.buttonFullForward.Name = "buttonFullForward";
             this.buttonFullForward.Size = new System.Drawing.Size(197, 24);
-            this.buttonFullForward.TabIndex = 13;
+            this.buttonFullForward.TabIndex = 18;
             this.buttonFullForward.Text = "FULL FORWARD (255)";
             this.buttonFullForward.UseVisualStyleBackColor = true;
             this.buttonFullForward.Click += new System.EventHandler(this.buttonFullForward_Click);
@@ -940,7 +964,7 @@
             this.buttonFullReverse.Location = new System.Drawing.Point(160, 580);
             this.buttonFullReverse.Name = "buttonFullReverse";
             this.buttonFullReverse.Size = new System.Drawing.Size(197, 24);
-            this.buttonFullReverse.TabIndex = 19;
+            this.buttonFullReverse.TabIndex = 17;
             this.buttonFullReverse.Text = "FULL REVERSE (0)";
             this.buttonFullReverse.UseVisualStyleBackColor = true;
             this.buttonFullReverse.Click += new System.EventHandler(this.buttonFullReverse_Click);
@@ -951,7 +975,7 @@
             this.buttonStraight.Location = new System.Drawing.Point(106, 339);
             this.buttonStraight.Name = "buttonStraight";
             this.buttonStraight.Size = new System.Drawing.Size(305, 23);
-            this.buttonStraight.TabIndex = 40;
+            this.buttonStraight.TabIndex = 14;
             this.buttonStraight.Text = "FULL STRAIGHT (128)";
             this.buttonStraight.UseVisualStyleBackColor = true;
             this.buttonStraight.Click += new System.EventHandler(this.buttonStraight_Click);
@@ -990,7 +1014,7 @@
             this.groupSignalColors.Location = new System.Drawing.Point(513, 63);
             this.groupSignalColors.Name = "groupSignalColors";
             this.groupSignalColors.Size = new System.Drawing.Size(244, 101);
-            this.groupSignalColors.TabIndex = 41;
+            this.groupSignalColors.TabIndex = 5;
             this.groupSignalColors.TabStop = false;
             this.groupSignalColors.Text = "Signal Colors";
             // 
@@ -1000,7 +1024,7 @@
             this.labelReverseSignal.Location = new System.Drawing.Point(140, 75);
             this.labelReverseSignal.Name = "labelReverseSignal";
             this.labelReverseSignal.Size = new System.Drawing.Size(49, 13);
-            this.labelReverseSignal.TabIndex = 2;
+            this.labelReverseSignal.TabIndex = 8;
             this.labelReverseSignal.Text = "#000000";
             // 
             // labelBrakeSignal
@@ -1009,7 +1033,7 @@
             this.labelBrakeSignal.Location = new System.Drawing.Point(140, 49);
             this.labelBrakeSignal.Name = "labelBrakeSignal";
             this.labelBrakeSignal.Size = new System.Drawing.Size(49, 13);
-            this.labelBrakeSignal.TabIndex = 2;
+            this.labelBrakeSignal.TabIndex = 5;
             this.labelBrakeSignal.Text = "#000000";
             // 
             // labelTurnSignal
@@ -1027,7 +1051,7 @@
             this.panelReverseSignal.Location = new System.Drawing.Point(109, 71);
             this.panelReverseSignal.Name = "panelReverseSignal";
             this.panelReverseSignal.Size = new System.Drawing.Size(25, 20);
-            this.panelReverseSignal.TabIndex = 1;
+            this.panelReverseSignal.TabIndex = 7;
             this.panelReverseSignal.DoubleClick += new System.EventHandler(this.panelReverseSignal_DoubleClick);
             // 
             // panelBrakeSignal
@@ -1036,7 +1060,7 @@
             this.panelBrakeSignal.Location = new System.Drawing.Point(109, 45);
             this.panelBrakeSignal.Name = "panelBrakeSignal";
             this.panelBrakeSignal.Size = new System.Drawing.Size(25, 20);
-            this.panelBrakeSignal.TabIndex = 1;
+            this.panelBrakeSignal.TabIndex = 4;
             this.panelBrakeSignal.DoubleClick += new System.EventHandler(this.panelBrakeSignal_DoubleClick);
             // 
             // panelTurnSignal
@@ -1054,7 +1078,7 @@
             this.label32.Location = new System.Drawing.Point(6, 75);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(97, 13);
-            this.label32.TabIndex = 0;
+            this.label32.TabIndex = 6;
             this.label32.Text = "Reverse Signal:";
             // 
             // label31
@@ -1063,7 +1087,7 @@
             this.label31.Location = new System.Drawing.Point(19, 49);
             this.label31.Name = "label31";
             this.label31.Size = new System.Drawing.Size(85, 13);
-            this.label31.TabIndex = 0;
+            this.label31.TabIndex = 3;
             this.label31.Text = "Brake Signal:";
             // 
             // label30
@@ -1075,33 +1099,46 @@
             this.label30.TabIndex = 0;
             this.label30.Text = "Turn Signal:";
             // 
-            // groupBox10
+            // groupEventLog
             // 
-            this.groupBox10.Controls.Add(this.listLog);
-            this.groupBox10.Location = new System.Drawing.Point(513, 298);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Padding = new System.Windows.Forms.Padding(8);
-            this.groupBox10.Size = new System.Drawing.Size(494, 306);
-            this.groupBox10.TabIndex = 42;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Log";
+            this.groupEventLog.Controls.Add(this.linkSaveEventLog);
+            this.groupEventLog.Controls.Add(this.linkClearEventLog);
+            this.groupEventLog.Controls.Add(this.listEventLog);
+            this.groupEventLog.Location = new System.Drawing.Point(513, 298);
+            this.groupEventLog.Name = "groupEventLog";
+            this.groupEventLog.Padding = new System.Windows.Forms.Padding(8);
+            this.groupEventLog.Size = new System.Drawing.Size(494, 174);
+            this.groupEventLog.TabIndex = 34;
+            this.groupEventLog.TabStop = false;
+            this.groupEventLog.Text = "Event Log";
             // 
-            // listLog
+            // linkClearEventLog
             // 
-            this.listLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.linkClearEventLog.AutoSize = true;
+            this.linkClearEventLog.Location = new System.Drawing.Point(377, 0);
+            this.linkClearEventLog.Name = "linkClearEventLog";
+            this.linkClearEventLog.Size = new System.Drawing.Size(109, 13);
+            this.linkClearEventLog.TabIndex = 0;
+            this.linkClearEventLog.TabStop = true;
+            this.linkClearEventLog.Text = "Clear Log Entries";
+            this.linkClearEventLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClearEventLog_LinkClicked);
+            // 
+            // listEventLog
+            // 
+            this.listEventLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader3});
-            this.listLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listLog.Font = new System.Drawing.Font("Consolas", 8.25F);
-            this.listLog.FullRowSelect = true;
-            this.listLog.GridLines = true;
-            this.listLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listLog.Location = new System.Drawing.Point(8, 21);
-            this.listLog.Name = "listLog";
-            this.listLog.Size = new System.Drawing.Size(478, 277);
-            this.listLog.TabIndex = 0;
-            this.listLog.UseCompatibleStateImageBehavior = false;
-            this.listLog.View = System.Windows.Forms.View.Details;
+            this.listEventLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listEventLog.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.listEventLog.FullRowSelect = true;
+            this.listEventLog.GridLines = true;
+            this.listEventLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listEventLog.Location = new System.Drawing.Point(8, 21);
+            this.listEventLog.Name = "listEventLog";
+            this.listEventLog.Size = new System.Drawing.Size(478, 145);
+            this.listEventLog.TabIndex = 1;
+            this.listEventLog.UseCompatibleStateImageBehavior = false;
+            this.listEventLog.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -1120,7 +1157,7 @@
             this.groupOutputPath.Location = new System.Drawing.Point(346, 12);
             this.groupOutputPath.Name = "groupOutputPath";
             this.groupOutputPath.Size = new System.Drawing.Size(661, 45);
-            this.groupOutputPath.TabIndex = 43;
+            this.groupOutputPath.TabIndex = 2;
             this.groupOutputPath.TabStop = false;
             this.groupOutputPath.Text = "Output Path";
             // 
@@ -1151,7 +1188,7 @@
             this.progressBattery.Name = "progressBattery";
             this.progressBattery.Size = new System.Drawing.Size(75, 23);
             this.progressBattery.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBattery.TabIndex = 44;
+            this.progressBattery.TabIndex = 25;
             // 
             // progressSignal
             // 
@@ -1160,7 +1197,7 @@
             this.progressSignal.Name = "progressSignal";
             this.progressSignal.Size = new System.Drawing.Size(75, 23);
             this.progressSignal.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressSignal.TabIndex = 44;
+            this.progressSignal.TabIndex = 29;
             // 
             // buttonSignal
             // 
@@ -1168,7 +1205,7 @@
             this.buttonSignal.Location = new System.Drawing.Point(432, 581);
             this.buttonSignal.Name = "buttonSignal";
             this.buttonSignal.Size = new System.Drawing.Size(75, 23);
-            this.buttonSignal.TabIndex = 45;
+            this.buttonSignal.TabIndex = 30;
             this.buttonSignal.Text = "UPDATE";
             this.buttonSignal.UseVisualStyleBackColor = true;
             this.buttonSignal.Click += new System.EventHandler(this.buttonSignal_Click);
@@ -1180,34 +1217,244 @@
             this.buttonBattery.Location = new System.Drawing.Point(432, 420);
             this.buttonBattery.Name = "buttonBattery";
             this.buttonBattery.Size = new System.Drawing.Size(75, 23);
-            this.buttonBattery.TabIndex = 45;
+            this.buttonBattery.TabIndex = 26;
             this.buttonBattery.Text = "UPDATE";
             this.buttonBattery.UseVisualStyleBackColor = true;
             this.buttonBattery.Click += new System.EventHandler(this.buttonBattery_Click);
             // 
             // buttonSendSettings
             // 
-            this.buttonSendSettings.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Bold);
-            this.buttonSendSettings.Location = new System.Drawing.Point(763, 63);
+            this.buttonSendSettings.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSendSettings.Location = new System.Drawing.Point(12, 610);
             this.buttonSendSettings.Name = "buttonSendSettings";
-            this.buttonSendSettings.Size = new System.Drawing.Size(244, 101);
-            this.buttonSendSettings.TabIndex = 46;
-            this.buttonSendSettings.Text = "SEND PROGRAM SETTINGS";
+            this.buttonSendSettings.Size = new System.Drawing.Size(243, 43);
+            this.buttonSendSettings.TabIndex = 31;
+            this.buttonSendSettings.Text = "SEND\r\nPROGRAM SETTINGS";
             this.buttonSendSettings.UseVisualStyleBackColor = true;
             this.buttonSendSettings.Click += new System.EventHandler(this.buttonSendSettings_Click);
+            // 
+            // buttonOpenSerial
+            // 
+            this.buttonOpenSerial.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonOpenSerial.Location = new System.Drawing.Point(261, 610);
+            this.buttonOpenSerial.Name = "buttonOpenSerial";
+            this.buttonOpenSerial.Size = new System.Drawing.Size(120, 43);
+            this.buttonOpenSerial.TabIndex = 32;
+            this.buttonOpenSerial.Text = "OPEN\r\nSERIAL PORT";
+            this.buttonOpenSerial.UseVisualStyleBackColor = true;
+            this.buttonOpenSerial.Click += new System.EventHandler(this.buttonOpenSerial_Click);
+            // 
+            // buttonCloseSerial
+            // 
+            this.buttonCloseSerial.Enabled = false;
+            this.buttonCloseSerial.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonCloseSerial.Location = new System.Drawing.Point(387, 610);
+            this.buttonCloseSerial.Name = "buttonCloseSerial";
+            this.buttonCloseSerial.Size = new System.Drawing.Size(120, 43);
+            this.buttonCloseSerial.TabIndex = 33;
+            this.buttonCloseSerial.Text = "CLOSE\r\nSERIAL PORT";
+            this.buttonCloseSerial.UseVisualStyleBackColor = true;
+            this.buttonCloseSerial.Click += new System.EventHandler(this.buttonCloseSerial_Click);
+            // 
+            // groupSerialLog
+            // 
+            this.groupSerialLog.Controls.Add(this.linkSaveSerialLog);
+            this.groupSerialLog.Controls.Add(this.linkClearSerialLog);
+            this.groupSerialLog.Controls.Add(this.listSerialLog);
+            this.groupSerialLog.Location = new System.Drawing.Point(513, 479);
+            this.groupSerialLog.Name = "groupSerialLog";
+            this.groupSerialLog.Padding = new System.Windows.Forms.Padding(8);
+            this.groupSerialLog.Size = new System.Drawing.Size(494, 174);
+            this.groupSerialLog.TabIndex = 35;
+            this.groupSerialLog.TabStop = false;
+            this.groupSerialLog.Text = "Serial Communication Log";
+            // 
+            // linkClearSerialLog
+            // 
+            this.linkClearSerialLog.AutoSize = true;
+            this.linkClearSerialLog.Location = new System.Drawing.Point(377, 0);
+            this.linkClearSerialLog.Name = "linkClearSerialLog";
+            this.linkClearSerialLog.Size = new System.Drawing.Size(109, 13);
+            this.linkClearSerialLog.TabIndex = 0;
+            this.linkClearSerialLog.TabStop = true;
+            this.linkClearSerialLog.Text = "Clear Log Entries";
+            this.linkClearSerialLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClearSerialLog_LinkClicked);
+            // 
+            // listSerialLog
+            // 
+            this.listSerialLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2,
+            this.columnHeader4});
+            this.listSerialLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listSerialLog.Font = new System.Drawing.Font("Consolas", 8.25F);
+            this.listSerialLog.FullRowSelect = true;
+            this.listSerialLog.GridLines = true;
+            this.listSerialLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listSerialLog.Location = new System.Drawing.Point(8, 21);
+            this.listSerialLog.Name = "listSerialLog";
+            this.listSerialLog.Size = new System.Drawing.Size(478, 145);
+            this.listSerialLog.TabIndex = 1;
+            this.listSerialLog.UseCompatibleStateImageBehavior = false;
+            this.listSerialLog.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Time";
+            this.columnHeader2.Width = 87;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Contents";
+            this.columnHeader4.Width = 370;
+            // 
+            // groupSerial
+            // 
+            this.groupSerial.Controls.Add(this.linkRefresh);
+            this.groupSerial.Controls.Add(this.numericCheckInterval);
+            this.groupSerial.Controls.Add(this.label5);
+            this.groupSerial.Controls.Add(this.comboBaudRate);
+            this.groupSerial.Controls.Add(this.comboPortName);
+            this.groupSerial.Controls.Add(this.label6);
+            this.groupSerial.Controls.Add(this.label4);
+            this.groupSerial.Controls.Add(this.label3);
+            this.groupSerial.Controls.Add(this.label1);
+            this.groupSerial.Location = new System.Drawing.Point(763, 63);
+            this.groupSerial.Name = "groupSerial";
+            this.groupSerial.Size = new System.Drawing.Size(244, 101);
+            this.groupSerial.TabIndex = 6;
+            this.groupSerial.TabStop = false;
+            this.groupSerial.Text = "Serial Configuration";
+            // 
+            // linkRefresh
+            // 
+            this.linkRefresh.AutoSize = true;
+            this.linkRefresh.Location = new System.Drawing.Point(180, 23);
+            this.linkRefresh.Name = "linkRefresh";
+            this.linkRefresh.Size = new System.Drawing.Size(49, 13);
+            this.linkRefresh.TabIndex = 2;
+            this.linkRefresh.TabStop = true;
+            this.linkRefresh.Text = "refresh";
+            this.linkRefresh.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkRefresh_LinkClicked);
+            // 
+            // numericCheckInterval
+            // 
+            this.numericCheckInterval.Location = new System.Drawing.Point(109, 72);
+            this.numericCheckInterval.Name = "numericCheckInterval";
+            this.numericCheckInterval.Size = new System.Drawing.Size(65, 20);
+            this.numericCheckInterval.TabIndex = 7;
+            this.numericCheckInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 76);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(97, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Check Interval:";
+            // 
+            // comboBaudRate
+            // 
+            this.comboBaudRate.FormattingEnabled = true;
+            this.comboBaudRate.Items.AddRange(new object[] {
+            "300",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "14400",
+            "19200",
+            "28800",
+            "38400",
+            "57600",
+            "115200"});
+            this.comboBaudRate.Location = new System.Drawing.Point(109, 45);
+            this.comboBaudRate.Name = "comboBaudRate";
+            this.comboBaudRate.Size = new System.Drawing.Size(65, 21);
+            this.comboBaudRate.TabIndex = 4;
+            // 
+            // comboPortName
+            // 
+            this.comboPortName.FormattingEnabled = true;
+            this.comboPortName.Location = new System.Drawing.Point(109, 18);
+            this.comboPortName.Name = "comboPortName";
+            this.comboPortName.Size = new System.Drawing.Size(65, 21);
+            this.comboPortName.TabIndex = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(180, 76);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(37, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "msecs";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(180, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(31, 13);
+            this.label4.TabIndex = 5;
+            this.label4.Text = "baud";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(36, 49);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Baud Rate:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(42, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(61, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "COM Port:";
+            // 
+            // linkSaveEventLog
+            // 
+            this.linkSaveEventLog.AutoSize = true;
+            this.linkSaveEventLog.Location = new System.Drawing.Point(340, 0);
+            this.linkSaveEventLog.Name = "linkSaveEventLog";
+            this.linkSaveEventLog.Size = new System.Drawing.Size(31, 13);
+            this.linkSaveEventLog.TabIndex = 2;
+            this.linkSaveEventLog.TabStop = true;
+            this.linkSaveEventLog.Text = "Save";
+            this.linkSaveEventLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkSaveEventLog_LinkClicked);
+            // 
+            // linkSaveSerialLog
+            // 
+            this.linkSaveSerialLog.AutoSize = true;
+            this.linkSaveSerialLog.Location = new System.Drawing.Point(340, 0);
+            this.linkSaveSerialLog.Name = "linkSaveSerialLog";
+            this.linkSaveSerialLog.Size = new System.Drawing.Size(31, 13);
+            this.linkSaveSerialLog.TabIndex = 2;
+            this.linkSaveSerialLog.TabStop = true;
+            this.linkSaveSerialLog.Text = "Save";
+            this.linkSaveSerialLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkSaveSerialLog_LinkClicked);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1019, 637);
+            this.ClientSize = new System.Drawing.Size(1019, 683);
+            this.Controls.Add(this.groupSerial);
+            this.Controls.Add(this.buttonCloseSerial);
+            this.Controls.Add(this.buttonOpenSerial);
             this.Controls.Add(this.buttonSendSettings);
             this.Controls.Add(this.buttonBattery);
             this.Controls.Add(this.buttonSignal);
             this.Controls.Add(this.progressSignal);
             this.Controls.Add(this.progressBattery);
             this.Controls.Add(this.groupOutputPath);
-            this.Controls.Add(this.groupBox10);
+            this.Controls.Add(this.groupSerialLog);
+            this.Controls.Add(this.groupEventLog);
             this.Controls.Add(this.groupSignalColors);
             this.Controls.Add(this.buttonStraight);
             this.Controls.Add(this.buttonFullRight);
@@ -1262,9 +1509,15 @@
             this.statusStrip.PerformLayout();
             this.groupSignalColors.ResumeLayout(false);
             this.groupSignalColors.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
+            this.groupEventLog.ResumeLayout(false);
+            this.groupEventLog.PerformLayout();
             this.groupOutputPath.ResumeLayout(false);
             this.groupOutputPath.PerformLayout();
+            this.groupSerialLog.ResumeLayout(false);
+            this.groupSerialLog.PerformLayout();
+            this.groupSerial.ResumeLayout(false);
+            this.groupSerial.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericCheckInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1343,8 +1596,8 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.ListView listLog;
+        private System.Windows.Forms.GroupBox groupEventLog;
+        private System.Windows.Forms.ListView listEventLog;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.GroupBox groupOutputPath;
@@ -1369,6 +1622,27 @@
         private System.Windows.Forms.Button buttonSignal;
         private System.Windows.Forms.Button buttonBattery;
         private System.Windows.Forms.Button buttonSendSettings;
+        private System.Windows.Forms.LinkLabel linkClearEventLog;
+        private System.Windows.Forms.Button buttonOpenSerial;
+        private System.Windows.Forms.Button buttonCloseSerial;
+        private System.Windows.Forms.GroupBox groupSerialLog;
+        private System.Windows.Forms.LinkLabel linkClearSerialLog;
+        private System.Windows.Forms.ListView listSerialLog;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.GroupBox groupSerial;
+        private System.Windows.Forms.NumericUpDown numericCheckInterval;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox comboBaudRate;
+        private System.Windows.Forms.ComboBox comboPortName;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label1;
+        private System.IO.Ports.SerialPort serialPort;
+        private System.Windows.Forms.LinkLabel linkRefresh;
+        private System.Windows.Forms.LinkLabel linkSaveEventLog;
+        private System.Windows.Forms.LinkLabel linkSaveSerialLog;
     }
 }
 
