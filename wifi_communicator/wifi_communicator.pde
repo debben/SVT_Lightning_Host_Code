@@ -10,6 +10,7 @@ unsigned short  local_port            = 8888;
 const char *    ssid                  = "TheAegeanSea";
 // the passphrase
 const char *    passphrase            = "dicknancydanmatt";
+// the ssid's mac address
 byte            ssid_mac_addr[]       = { 0x68, 0x7F, 0x74, 0xA3, 0xFD, 0xCD };
 // define the wifi connect macro
 #define WiFiConnectMacro() DWIFIcK::connect(ssid, passphrase, &status)
@@ -44,14 +45,14 @@ UDP_STATE udp_state = UDP_INITIALIZE;
 typedef enum
 {
     NET_NONE                = 0x00,
-    NET_WAIT_FOR_SCAN       = 0x11,
-    NET_PRINT_AP_INFO       = 0x12,
-    NET_ERROR               = 0x13,
-    NET_STOP                = 0x14,
-    NET_DONE                = 0x15
+    NET_WAIT_FOR_SCAN       = 0x01,
+    NET_PRINT_AP_INFO       = 0x02,
+    NET_ERROR               = 0x03,
+    NET_STOP                = 0x04,
+    NET_DONE                = 0x05
 } NET_STATE;
 
-NET_STATE net_state = NET_NONE;
+NET_STATE net_state = NET_WAIT_FOR_SCAN;
 
 // the client buffer
 byte            client_buffer[MAXIMUM_CLIENT_BUFFER];
@@ -108,14 +109,12 @@ byte            reverse_green         = 0x00;
 byte            reverse_blue          = 0x00;
 
 // the status
-DNETcK::STATUS  status;
+DNETcK::STATUS      status = DNETcK::None;
 // the scan info object
-DWIFIcK::SCANINFO scan_data;
+DWIFIcK::SCANINFO   scan_data;
 
 void setup()
 {
-    // the status
-    DNETcK::STATUS status;
     // the connection id
     int connection_id = DWIFIcK::INVALID_CONNECTION_ID;
     // initialize the serial port
@@ -126,6 +125,10 @@ void setup()
     Serial.println("-        WiFi R/C Car Communicator        -");
     Serial.println("-    Kettering University, Winter 2013    -");
     Serial.println("-------------------------------------------");
+    // set the wait time to nothing
+    DNETcK::setDefaultBlockTime(DNETcK::msImmediate);
+    // begin the scan
+    DWIFIcK::beginScan(DWIFIcK::WF_ACTIVE_SCAN);
     // determine if the device can connect to wifi
     if ((connection_id = WiFiConnectMacro()) != DWIFIcK::INVALID_CONNECTION_ID)
     {
@@ -143,12 +146,9 @@ void setup()
           Serial.print("Status = "); Serial.println(status, DEC);
         // save the state
         udp_state = UDP_CLOSE;
-    }
-    
+    }    
     // initialize the stack
     DNETcK::begin(local_ip_addr);
-    // set the wait time to nothing
-    DNETcK::setDefaultBlockTime(DNETcK::msImmediate);
 }
 
 void loop()
@@ -166,17 +166,6 @@ void loop()
                 Serial.println("WiFi network scan was successfully completed!");
                 // save the state
                 net_state = NET_PRINT_AP_INFO;
-            }
-            else
-            if (DWIFIcK::isScanDone(&available_networks, &status) == false)
-            {
-                // print
-                Serial.println("Waiting for scan to complete");
-                Serial.println("Waiting 1000 msecs...");
-                // delay
-                delay(1000);
-                // print
-                Serial.println("Delay complete.");
             }
             else
             if (DNETcK::isStatusAnError(status))
@@ -198,51 +187,40 @@ void loop()
                 if (DWIFIcK::getScanInfo(current_network, &scan_data))
                 {
                     // there is scan data for this network
-                    // print the ssid
+                    // print
                     Serial.println("");
                     Serial.print("Index:          "); Serial.println(current_network, DEC);
                     Serial.print("SSID:           "); Serial.println(scan_data.szSsid);
-                    // determine if this is the desired network
-                    if (scan_data.szSsid == ssid)
+                    Serial.print("Security:       "); Serial.println(scan_data.securityType, DEC);
+                    Serial.print("Channel:        "); Serial.println(scan_data.channel, DEC);
+                    Serial.print("Strength:       "); Serial.println(scan_data.signalStrength, DEC);
+                    Serial.print("Rate Count:     "); Serial.println(scan_data.cBasicRates, DEC);
+                    // iterate through the rates
+                    for (int rate_index = 0; rate_index < scan_data.cBasicRates; rate_index++)
                     {
-                        // this is the desired network
                         // print
-                        Serial.println("");
-                        Serial.print("Index:          "); Serial.println(current_network, DEC);
-                        Serial.print("SSID:           "); Serial.println(scan_data.szSsid);
-                        Serial.print("Security:       "); Serial.println(scan_data.securityType, DEC);
-                        Serial.print("Channel:        "); Serial.println(scan_data.channel, DEC);
-                        Serial.print("Strength:       "); Serial.println(scan_data.signalStrength, DEC);
-                        Serial.print("Rate Count:     "); Serial.println(scan_data.cBasicRates, DEC);
-                        // iterate through the rates
-                        for (int rate_index = 0; rate_index < scan_data.cBasicRates; rate_index++)
+                        Serial.print("    Rate:       "); 
+                          Serial.print(scan_data.basicRates[rate_index], DEC); 
+                          Serial.println(" bps");
+                    }
+                    // print
+                    Serial.print("MAC Address:    ");
+                    // iterate through the mac address
+                    for (int byte_index = 0; byte_index < sizeof(scan_data.ssidMAC); byte_index++)
+                    {
+                        // determine if this value is less than 16
+                        if (scan_data.ssidMAC[byte_index] < 16)
                         {
                             // print
-                            Serial.print("    Rate:       "); 
-                              Serial.print(scan_data.basicRates[rate_index], DEC); 
-                              Serial.println(" bps");
+                            Serial.print(0, HEX);
                         }
-                        // print
-                        Serial.print("MAC Address:    ");
-                        // iterate through the mac address
-                        for (int byte_index = 0; byte_index < sizeof(scan_data.ssidMAC); byte_index++)
-                        {
-                            // determine if this value is less than 16
-                            if (scan_data.ssidMAC[byte_index] < 16)
-                            {
-                                // print
-                                Serial.print(0, HEX);
-                            }
-                            // print the rest of this byte
-                            Serial.print(scan_data.ssidMAC[byte_index], HEX);
-                        }
-                        // break out of the loop
-                        break;
+                        // print the rest of this byte
+                        Serial.print(scan_data.ssidMAC[byte_index], HEX);
                     }
                 }
             }
-
-            
+            // save the state
+            net_state = NET_STOP;
             // break out
             break;
         case NET_ERROR:
@@ -571,8 +549,6 @@ void loop()
                         Serial.println("Net state set to 'WAIT_FOR_SCAN'");
                         // save the net state
                         net_state = NET_WAIT_FOR_SCAN;
-                        // begin the scan
-                        DWIFIcK::beginScan();
                     }
                     // break out
                     break;                

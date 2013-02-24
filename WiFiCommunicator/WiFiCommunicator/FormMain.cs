@@ -863,10 +863,14 @@ namespace WiFiCommunicator
             if (IPAddress.TryParse(textTargetIP.Text, out address))
             {
                 // the address is valid
-                // report the event
-                ReportEvent("Pinging target IP address.");
-                // run the ping worker
-                workerPing.RunWorkerAsync(address);
+                // determine if the worker is busy
+                if (workerTransmitter.IsBusy == false)
+                {
+                    // report the event
+                    ReportEvent("Pinging target IP address.");
+                    // run the ping worker
+                    workerPing.RunWorkerAsync(address);
+                }
             }
             else
             {
