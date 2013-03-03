@@ -1,0 +1,39 @@
+#include "Stream.h"
+
+// returns the first valid (long) integer value from the current position.
+// initial characters that are not digits (or the minus sign) are skipped
+// function is terminated by the first character that is not a digit.
+long Stream::parseInt()
+{
+  return parseInt(NO_SKIP_CHAR); // terminate on first non-digit character (or timeout)
+}
+
+// as above but a given skipChar is ignored
+// this allows format characters (typically commas) in values to be ignored
+long Stream::parseInt(char skipChar)
+{
+  boolean isNegative = false;
+  long value = 0;
+  int c;
+
+  c = peekNextDigit();
+  // ignore non numeric leading characters
+  if(c < 0)
+    return 0; // zero returned if timeout
+
+  do{
+    if(c == skipChar)
+      ; // ignore this charactor
+    else if(c == '-')
+      isNegative = true;
+    else if(c >= '0' && c <= '9')        // is c a digit?
+      value = value * 10 + c - '0';
+    read();  // consume the character we got with peek
+    c = timedPeek();
+  }
+  while( (c >= '0' && c <= '9') || c == skipChar );
+
+  if(isNegative)
+    value = -value;
+  return value;
+}
