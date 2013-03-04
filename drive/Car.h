@@ -7,15 +7,20 @@ Author: Don Ebben
 Purpose: contains prototypes for the car class.
 
 */
+#ifndef CAR_H
+#define CAR_H
+
 #include <Servo.h>
 #include "config.h"
 
 //constants
 #define NEUTRAL			90
 
+//macros
+#define MAP_VALUE(lowIn,highIn,lowOut,highOut,value)  (((highOut - lowOut) * value)/(highIn - lowIn)) + ((highOut-lowOut)/2)
 
 //this structure contains the UDP data packet format
-typedef struct DrivePacket {
+struct DrivePacket {
 	signed short throttle, steering;
 };
 
@@ -30,8 +35,11 @@ class Car {
 
 	public:
 		bool begin();
-		void drive(DrivePacket* p);
+		void drive(byte* p);
+
+
 
 };
 
 
+#endif

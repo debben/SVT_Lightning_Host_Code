@@ -7,11 +7,15 @@
 			based on the enviroment and netwrok status.
 */
 
+#ifndef VEHICLECONTROLLER_H
+#define VEHICLECONTROLLER_H
+
 #include <SD.h>
 #include "config.h"
 #include <aJSON.h>
 #include "NetworkController.h"
 #include <DNETcK.h>
+#include "Car.h"
 
 #define STATE_START					0
 #define STATE_CHECKING_SD			1
@@ -48,5 +52,8 @@ private:
 
 public:
 	void run();
+	Car car;
 
 };
+
+#endif

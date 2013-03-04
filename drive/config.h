@@ -6,6 +6,9 @@ and not compile
 
 */
 
+#ifndef CONFIG_H
+#define CONFIG_H
+
 // Pin configurations
 
 #define BRAKE_LED				28
@@ -20,4 +23,7 @@ and not compile
 
 //compile time options comment to dissable
 
-#define VERBOSE_SERIAL
+//#define VERBOSE_SERIAL
+//#define FAT_DEGBUG
+
+#endif

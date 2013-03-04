@@ -10,11 +10,15 @@
 #include "VehicleController.h"
 #include <string.h>
 #include <stdlib.h>
+#include "Lights.h"      
 
 
 void VehicleController::run(){
 	switch(state){
 		case STATE_START:
+      Lights.setPeriod(1500);
+      Lights.setLights(LEFT_SIGNAL | RIGHT_SIGNAL | BRAKE_LIGHT, LOW );
+      Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL | BRAKE_LIGHT);
 			state = setupSD();
 			break;
 		case STATE_CHECKING_SD:
@@ -26,9 +30,14 @@ void VehicleController::run(){
 			break;
 		case STATE_CONNECTING:
       state = connectToNetwork();
+      //set the caution lights
+      Lights.setPeriod(2500);
+      Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
 			break;
     case STATE_CONNECTED:
       net.run();
+      break;
+    case STATE_WARNING:
       break;
 		default:
 			state = STATE_WARNING;
@@ -219,6 +228,9 @@ int VehicleController::connectToNetwork(){
   if(net.state == EXIT || net.state == DONE){
     return STATE_WARNING;
   }
+
+  net.car = &car;
+  net.packetSize = sizeof(DrivePacket);
 
   return STATE_CONNECTED;
 }

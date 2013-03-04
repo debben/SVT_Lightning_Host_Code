@@ -8,11 +8,14 @@ Purpose: state machine for managing the networking
 
 */
 
+#ifndef NETWORKCONTROLLER_H
+#define NETWORKCONTROLLER_H
+
 #include <WiFiShieldOrPmodWiFi.h>
 
 #include <DNETcK.h>
 #include <DWIFIcK.h>
-
+#include "Car.h"
 const int cPending = 3; // number of clients the server will hold until accepted
 
 
@@ -60,8 +63,12 @@ class NetworkController {
 
 
 	public:
+		Car *car;
+		unsigned int packetSize;		
 		IPv4 ipServer;
 		STATE state;
 		void run();
 		void begin();
 };
+
+#endif

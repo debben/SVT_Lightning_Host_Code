@@ -5,9 +5,9 @@ Author: Don Ebben
 
 Purpose: state machine for managing the networking
 */
-#import "config.h"
-#import "NetworkController.h"
-
+#include "config.h"
+#include "NetworkController.h"
+#include "Lights.h"
 
 
 
@@ -109,6 +109,10 @@ void NetworkController::run(){
         // accept the client 
         if(udpServer->acceptClient(udpClient))
         {
+
+            //Let's turn the lights off
+            Lights.setBlinkingLights(0);
+
         	#ifdef VERBOSE_SERIAL
             	Serial.println("Got a Connection");
             #endif
@@ -141,7 +145,7 @@ void NetworkController::run(){
             #endif
            
            //parse out the data
-           if(cbRead != 4){
+           if(cbRead != packetSize){
              break;
              
            }
@@ -150,6 +154,7 @@ void NetworkController::run(){
            //chip kit is reverse of what we think it is. //probably best
            //to just send packets
            
+           car->drive(rgbRead);
            
 			#ifdef VERBOSE_SERIAL
 
@@ -173,27 +178,30 @@ void NetworkController::run(){
 
     // echo back the string
     case WRITE:
-
+    	//TODO: 
     	#ifdef VERBOSE_SERIAL
         	Serial.println("Writing datagram: ");  
         
 
-	        for(int i=0; i < cbRead; i++) 
-        	{
-	            Serial.print(rgbRead[i], BYTE);
-        	}
-        	Serial.println("");  
+	        //for(int i=0; i < cbRead; i++) 
+        	//{
+	        //    Serial.print(rgbRead[i], BYTE);
+        	//}
+        	//Serial.println("");  
 
 		#endif
 
-        udpClient->writeDatagram(rgbRead, cbRead);
-        state = READ;
-        tStart = (unsigned) millis();
+        //udpClient->writeDatagram(rgbRead, cbRead);
+        //state = READ;
+        //tStart = (unsigned) millis();
         break;
         
     // close our udpClient and go back to listening
     case CLOSE:
         udpClient->close();
+        //turn the lights back on
+        Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
+
         #ifdef VERBOSE_SERIAL
         	Serial.println("Closing UdpClient");
         	Serial.println("");
