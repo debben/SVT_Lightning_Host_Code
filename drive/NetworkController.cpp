@@ -201,6 +201,7 @@ void NetworkController::run(){
         udpClient->close();
         //turn the lights back on
         Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
+        car->dissable();
 
         #ifdef VERBOSE_SERIAL
         	Serial.println("Closing UdpClient");

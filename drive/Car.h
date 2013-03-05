@@ -36,6 +36,7 @@ class Car {
 	public:
 		bool begin();
 		void drive(byte* p);
+		void dissable();
 
 
 

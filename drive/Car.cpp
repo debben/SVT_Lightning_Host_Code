@@ -48,4 +48,6 @@ void Car::drive(byte* p)
 
 }
 
-
+void Car::dissable(){
+	throttle.write(NEUTRAL);//put the car in neutral.
+}

@@ -13,16 +13,18 @@
 #define         MIN_TRACK             0x0000    // 0000
 #define         TOGGLE_DELAY          0x0400    // 1024 (milliseconds)
 
+#define         AUDIO_TOGGLE_DELAY    TOGGLE_DELAY
+
 // the local ip address
 IPv4            local_ip_addr         = { 192, 168, 1, 200 };
 // the local port
 unsigned short  local_port            = 8888;
 // the ssid
-const char *    ssid                  = "TheAegeanSea";
+const char *    ssid                  = "b166er";
 // the passphrase
-const char *    passphrase            = "dicknancydanmatt";
+const char *    passphrase            = "1122334455";
 // the ssid's mac address
-byte            ssid_mac_addr[]       = { 0x68, 0x7F, 0x74, 0xA3, 0xFD, 0xCD };
+byte            ssid_mac_addr[]       = { 0x00, 0x15, 0xe9, 0x1D, 0xC4, 0x13 };
 // define the wifi connect macro
 #define WiFiConnectMacro() DWIFIcK::connect(ssid, passphrase, &status)
 
@@ -142,11 +144,11 @@ void setup()
     Serial.println("-    Kettering University, Winter 2013    -");
     Serial.println("-------------------------------------------");
     // initialize the audio breakout pins
-    pinMode(AUDIO_RESET_PIN);    // do not toggle
-    pinMode(AUDIO_PREVIOUS_PIN); digitalWrite(AUDIO_PREVIOUS_PIN, HIGH);
-    pinMode(AUDIO_NEXT_PIN);     digitalWrite(AUDIO_NEXT_PIN, HIGH);
-    pinMode(AUDIO_PLAY_PIN);     digitalWrite(AUDIO_PLAY_PIN, HIGH);
-    pinMode(AUDIO_BUSY_PIN);     // input only
+    pinMode(AUDIO_RESET_PIN,OUTPUT);    // do not toggle
+    pinMode(AUDIO_PREVIOUS_PIN, OUTPUT); digitalWrite(AUDIO_PREVIOUS_PIN, HIGH);
+    pinMode(AUDIO_NEXT_PIN, OUTPUT);     digitalWrite(AUDIO_NEXT_PIN, HIGH);
+    pinMode(AUDIO_PLAY_PIN, OUTPUT);     digitalWrite(AUDIO_PLAY_PIN, HIGH);
+    pinMode(AUDIO_BUSY_PIN, INPUT);     // input only
     // determine if the device can connect to wifi
     if ((connection_id = WiFiConnectMacro()) != DWIFIcK::INVALID_CONNECTION_ID)
     {
