@@ -32,6 +32,7 @@ void VehicleController::run(){
       state = connectToNetwork();
       //set the caution lights
       Lights.setPeriod(2500);
+      Lights.setLights(BRAKE_LIGHT,LOW);
       Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
 			break;
     case STATE_CONNECTED:

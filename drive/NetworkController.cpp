@@ -14,7 +14,7 @@ Purpose: state machine for managing the networking
 void NetworkController::begin(){
   state = INITIALIZE;
   tStart = 0;
-  tWait = 5000;
+  tWait = UDP_CLIENT_TIMEOUT;
   udpClient = new UdpClient(rgbUDPClientCache, sizeof(rgbUDPClientCache));
 
   portServer = DNETcK::iPersonalPorts44 + 400;
@@ -112,7 +112,7 @@ void NetworkController::run(){
 
             //Let's turn the lights off
             Lights.setBlinkingLights(0);
-
+            Lights.setLights(0,false);
         	#ifdef VERBOSE_SERIAL
             	Serial.println("Got a Connection");
             #endif

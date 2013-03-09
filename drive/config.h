@@ -16,11 +16,11 @@ and not compile
 #define RIGHT_SIGNAL_LED		32
 
 #define STEERING_PIN			34
-#define THROTTLE_PIN			36
+#define THROTTLE_PIN			38
 
 #define SD_SPI_CS				4
 
-
+#define UDP_CLIENT_TIMEOUT		500
 //compile time options comment to dissable
 
 //#define VERBOSE_SERIAL
