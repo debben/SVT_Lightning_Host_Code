@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Lights.h"      
-
+#include "Encoder.h"
 
 void VehicleController::run(){
 	switch(state){
@@ -25,10 +25,12 @@ void VehicleController::run(){
 			//do code to try and read the file off the SD card
 			state = mountSD();
 			break;
-		case STATE_CONFIGURE_NETWORK:
+		case STATE_CONFIGURE_NETWORK:    
 			state = readNetworkConfig();
 			break;
 		case STATE_CONNECTING:
+      //we have good sd. Let's setup the encoder
+      Encoder.begin();
       state = connectToNetwork();
       //set the caution lights
       Lights.setPeriod(2500);

@@ -42,16 +42,25 @@ void __ISR(_TIMER_2_VECTOR,IPL3AUTO) lightToggle(void)
   	digitalWrite(BRAKE_LED,brake);
   	brake = !brake;
   }
+  else{
+    digitalWrite(BRAKE_LED,false);
+  }
 
   if(lightMask & LEFT_SIGNAL)
   {
   	digitalWrite(LEFT_SIGNAL_LED, left);
   	left = !left;
   }
+  else{
+    digitalWrite(LEFT_SIGNAL_LED,false);
+  }
 
   if(lightMask & RIGHT_SIGNAL){
   	digitalWrite(RIGHT_SIGNAL_LED, right);	
   	right = !right;
+  }
+  else{
+    digitalWrite(RIGHT_SIGNAL_LED, false);
   }
   
 

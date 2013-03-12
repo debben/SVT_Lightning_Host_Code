@@ -7,6 +7,7 @@ Author: Don Ebben
 Purpose: Test out preliminary driving classes.
 
 */
+
 #include "config.h"
 
 
@@ -23,16 +24,19 @@ Purpose: Test out preliminary driving classes.
 #include "Car.h"
 #include "VehicleController.h"
 
-
+#include "Encoder.h"
 
 //variables
 Car ford;
 VehicleController controller;
+//singlton instance
+
 
 void setup(){
   ford.begin();
   controller.car = ford;
   Lights.begin();
+  
   Lights.setLights(BRAKE_LIGHT | LEFT_SIGNAL | RIGHT_SIGNAL, LOW);
   Serial.begin(9600);
 }

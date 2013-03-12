@@ -8,6 +8,7 @@ Purpose: state machine for managing the networking
 #include "config.h"
 #include "NetworkController.h"
 #include "Lights.h"
+#include "Encoder.h"
 
 
 
@@ -112,7 +113,7 @@ void NetworkController::run(){
 
             //Let's turn the lights off
             Lights.setBlinkingLights(0);
-            Lights.setLights(0,false);
+            Lights.setLights(LEFT_SIGNAL | RIGHT_SIGNAL,false);
         	#ifdef VERBOSE_SERIAL
             	Serial.println("Got a Connection");
             #endif
@@ -145,7 +146,7 @@ void NetworkController::run(){
             #endif
            
            //parse out the data
-           if(cbRead != packetSize){
+           if(cbRead != 5){
              break;
              
            }
@@ -165,7 +166,7 @@ void NetworkController::run(){
            		//Serial.println(steering_angle,DEC);           
             #endif
 
-           
+           state = WRITE;
         }
 
         // If too much time elapsed between reads, close the connection
@@ -179,21 +180,24 @@ void NetworkController::run(){
     // echo back the string
     case WRITE:
     	//TODO: 
-    	#ifdef VERBOSE_SERIAL
-        	Serial.println("Writing datagram: ");  
+    	//#ifdef VERBOSE_SERIAL
+ 
         
+        //	Serial.print("count: ");  
+          //  Serial.print(count);  
+            //Serial.print("period: ");  
+            //Serial.print(period);  
 
-	        //for(int i=0; i < cbRead; i++) 
-        	//{
-	        //    Serial.print(rgbRead[i], BYTE);
-        	//}
-        	//Serial.println("");  
+		//#endif
 
-		#endif
+        struct  ReturnPacket p;
+        
+        p.count = wheel_count;
+        p.period = period;
 
-        //udpClient->writeDatagram(rgbRead, cbRead);
-        //state = READ;
-        //tStart = (unsigned) millis();
+        udpClient->writeDatagram((byte*)&p, sizeof(ReturnPacket));
+        state = READ;
+        tStart = (unsigned) millis();
         break;
         
     // close our udpClient and go back to listening
@@ -202,7 +206,7 @@ void NetworkController::run(){
         //turn the lights back on
         Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
         car->dissable();
-
+        //Encoder.save();
         #ifdef VERBOSE_SERIAL
         	Serial.println("Closing UdpClient");
         	Serial.println("");

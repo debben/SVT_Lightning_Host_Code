@@ -21,7 +21,15 @@ Purpose: contains prototypes for the car class.
 
 //this structure contains the UDP data packet format
 struct DrivePacket {
-	signed short throttle, steering;
+	signed short throttle_power;
+	signed short steering_angle;
+	byte aux;
+};
+
+//this structure is the response messae
+struct ReturnPacket {
+	unsigned int count;
+	unsigned int period;
 };
 
 class Car {

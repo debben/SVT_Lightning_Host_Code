@@ -29,6 +29,6 @@ public:
 	
 };
 
-
 extern LightsClass Lights;
+
 #endif
