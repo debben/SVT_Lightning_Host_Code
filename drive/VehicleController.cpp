@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "Lights.h"      
 #include "Encoder.h"
+#include "Audio.h"      
 
 void VehicleController::run(){
 	switch(state){
@@ -19,7 +20,11 @@ void VehicleController::run(){
       Lights.setPeriod(1500);
       Lights.setLights(LEFT_SIGNAL | RIGHT_SIGNAL | BRAKE_LIGHT, LOW );
       Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL | BRAKE_LIGHT);
-			state = setupSD();
+			#ifdef AUDIO
+      Stereo.setup();
+      #endif
+
+      state = setupSD();
 			break;
 		case STATE_CHECKING_SD:
 			//do code to try and read the file off the SD card
@@ -38,6 +43,10 @@ void VehicleController::run(){
       Lights.setBlinkingLights(LEFT_SIGNAL | RIGHT_SIGNAL);
 			break;
     case STATE_CONNECTED:
+      #ifdef AUDIO
+      //todo: remove this later
+      Stereo.togglePlayback();
+      #endif
       net.run();
       break;
     case STATE_WARNING:

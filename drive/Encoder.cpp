@@ -40,13 +40,17 @@ void Odometer::begin(){
   //}
 
  // myFile.close();
-
   pinMode( QRE1113_Pin, OUTPUT );
+  digitalWrite(QRE1113_Pin,LOW);//pull the pin low to charge low for a bit
+  delay(50);
+
+  attachInterrupt(2, readQD, FALLING);
+
+  
   digitalWrite( QRE1113_Pin, HIGH );  
   delayMicroseconds(ONTIME);
   pinMode( QRE1113_Pin, INPUT );
 
-  attachInterrupt(2, readQD, FALLING);
 }
 
 void Odometer::run(){

@@ -13,9 +13,9 @@ and not compile
 
 #define BRAKE_LED				28
 #define LEFT_SIGNAL_LED			30
-#define RIGHT_SIGNAL_LED		32
+#define RIGHT_SIGNAL_LED		25
 
-#define STEERING_PIN			34
+#define STEERING_PIN			37
 #define THROTTLE_PIN			38
 
 #define SD_SPI_CS				4
@@ -32,11 +32,31 @@ and not compile
 #define ODOM_INT_PIN  7; //connected to the light sensor
 
 
+// define the audio breakout pins
+#define         AUDIO_RESET_PIN      23
+#define         AUDIO_PREVIOUS_PIN    36
+#define         AUDIO_PLAY_PIN        22
+#define         AUDIO_NEXT_PIN        24
+#define         AUDIO_BUSY_PIN        26
+// define the audio bounds
+#define         MAX_TRACK             0x01FF    // 0511
+#define         MIN_TRACK             0x0000    // 0000
+#define         TOGGLE_DELAY          0x0400    // 1024 (milliseconds)
+
+#define         AUDIO_TOGGLE_DELAY    TOGGLE_DELAY
+
+
+//brown next 24 
+//green play 22
+//purple busy 26
+//white previous 36
+//yellow reset 23
 
 //compile time options comment to dissable
 
 
 //#define VERBOSE_SERIAL
 //#define FAT_DEGBUG
+//#define AUDIO
 #define LIGHTS
 #endif

@@ -12,9 +12,10 @@ Contains methods and variables related to the car class.
 #include "config.h"
 #include "Lights.h"
 #include "Encoder.h"
+#include "Audio.h"
 
 bool lastWasForward = true;
-
+int signalDebounce =0;
 //Configures the car for opperation.
 bool Car::begin(){
 
@@ -41,16 +42,20 @@ void Car::drive(byte* p)
     pac->steering_angle = MAP_VALUE(-1000,1000,0,180,pac->steering_angle);
 
 	lastWasForward = (pac->throttle_power < NEUTRAL && lastWasForward);
+	
+	//Lights.setLights(BRAKE_LIGHT, true);
+	digitalWrite(BRAKE_LED,pac->throttle_power <= NEUTRAL);
+
 	if(lastWasForward)
 	{
 		lastWasForward = false;
 		pac->throttle_power = NEUTRAL;
-		Lights.setLights(BRAKE_LIGHT, false);
+		//Lights.setLights(BRAKE_LIGHT, false);
 	}
 	else if(pac->throttle_power > NEUTRAL)
 	{
 		lastWasForward = true;
-		Lights.setLights(BRAKE_LIGHT, true);
+		//Lights.setLights(BRAKE_LIGHT, true);
 	}
 
 	
@@ -66,6 +71,17 @@ void Car::drive(byte* p)
    	throttle.write(pac->throttle_power);
            
     steering.write(pac->steering_angle);
+
+
+    #ifdef AUDIO
+    if(!(pac->aux & LEFT_SIGNAL) && (pac->aux & LEFT_SIGNAL)){
+    	Stereo.previousTrack();
+    }
+    if(!(pac->aux & RIGHT_SIGNAL) && (pac->aux & RIGHT_SIGNAL)){
+    	Stereo.nextTrack();
+    }
+    signalDebounce = pac->aux;
+    #endif
 
     #ifdef LIGHTS
     //if not in a warning state, set the time to be a normal turn signal period
