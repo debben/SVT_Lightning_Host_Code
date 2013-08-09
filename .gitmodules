@@ -1,3 +1,3 @@
 [submodule "libraries/aJson"]
 	path = libraries/aJson
-	url = https://github.com/CE-490/aJson.git
+	url = https://github.com/debben/aJson.git
